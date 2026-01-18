@@ -1,0 +1,147 @@
+/* 动画效果定义 */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* 淡入动画 */
+.fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* 左侧滑入 */
+.slide-in-left {
+  animation: slideInLeft 0.5s ease-out;
+}
+
+/* 右侧滑入 */
+.slide-in-right {
+  animation: slideInRight 0.5s ease-out;
+}
+
+/* 缩放进入 */
+.scale-in {
+  animation: scaleIn 0.4s ease-out;
+}
+
+/* 悬停提升效果 */
+.hover-lift {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* 玻璃态效果 */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* 渐变背景 */
+.gradient-bg {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-size: 200% 200%;
+  animation: gradient 15s ease infinite;
+}
+
+/* 卡片阴影动画 */
+.card-shadow {
+  transition: box-shadow 0.3s ease;
+}
+
+.card-shadow:hover {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+}
+
+/* 平滑过渡 */
+.smooth-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 延迟动画 */
+.animation-delay-1 {
+  animation-delay: 0.1s;
+}
+
+.animation-delay-2 {
+  animation-delay: 0.2s;
+}
+
+.animation-delay-3 {
+  animation-delay: 0.3s;
+}
+

@@ -1,0 +1,13 @@
+{
+  "ret": 200,
+  "data": {
+    "code": "0",
+    "msg": "ok",
+    "info": {
+      "need_update": 0,
+      "version": {}
+    }
+  },
+  "msg": "",
+  "time": "2025/11/07 21:49:51"
+}

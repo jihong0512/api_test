@@ -1,0 +1,37 @@
+登录响应: {
+  "ret": 200,
+  "data": {
+    "code": "0",
+    "info": {
+      "xjid": "30110",
+      "nickname": "小金30110",
+      "gender": "",
+      "avatar": "https://cdn.cnbj2.fds.api.mi-img.com/livexiaojin/user/male.png",
+      "province": "北京",
+      "city": "丰台",
+      "birthday": "",
+      "month": "01",
+      "day": "01",
+      "height": "170",
+      "weight": "60",
+      "my_slogan": "",
+      "regdate": "2025-10-09 15:28:33",
+      "guide": "0",
+      "guide_a1pro": "[]",
+      "no_phone": "0",
+      "phone": "13126827685",
+      "weight_target": null,
+      "last_logintime": "2025-11-07 21:49:27",
+      "ranking": "1",
+      "first_bind_device": "0",
+      "first_sign_up": 0,
+      "refresh_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhcGkueGlhb2ppbi5jb20iLCJ4amlkIjoiMzAxMTAiLCJpYXQiOjE3NjI1MjMzOTAsImV4cCI6MTc3ODA3NTM5MH0.3vPKejHnJBvGE8c0Fx92J-7muRGDfmYoMGtJogdAq2s",
+      "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhcGkueGlhb2ppbi5jb20iLCJ4amlkIjoiMzAxMTAiLCJpYXQiOjE3NjI1MjMzOTAsImV4cCI6MTc3MDI5OTM5MCwicGxhdGZvcm0iOiJwaG9uZSJ9.tvLdPboEimzH8CwfEGIHFh0g05nrc54dhWBuyKCNwmE",
+      "have_plan": "0",
+      "tag_list": null
+    },
+    "msg": "登录成功"
+  },
+  "msg": "",
+  "time": "2025/11/07 21:49:50"
+}

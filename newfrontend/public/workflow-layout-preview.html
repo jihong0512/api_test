@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>流程布局预览</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .workflow-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+        }
+
+        .workflow-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .workflow-header h1 {
+            font-size: 32px;
+            color: #2d3748;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .workflow-header p {
+            color: #718096;
+            font-size: 16px;
+        }
+
+        .workflow-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            position: relative;
+            padding: 40px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        /* 连接线 */
+        .workflow-steps::before {
+            content: '';
+            position: absolute;
+            top: 80px;
+            left: 10%;
+            right: 10%;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            z-index: 0;
+        }
+
+        .workflow-step {
+            flex: 1;
+            min-width: 180px;
+            max-width: 220px;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .step-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .step-icon::after {
+            content: '';
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border: 3px solid rgba(102, 126, 234, 0.2);
+            border-radius: 50%;
+            top: -10px;
+            left: -10px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.5;
+            }
+        }
+
+        .workflow-step:hover .step-icon {
+            transform: translateY(-10px) scale(1.1);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+        }
+
+        .step-number {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 30px;
+            height: 30px;
+            background: #f56565;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 4px 10px rgba(245, 101, 101, 0.4);
+        }
+
+        .step-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .step-description {
+            font-size: 14px;
+            color: #718096;
+            line-height: 1.6;
+        }
+
+        .step-arrow {
+            position: absolute;
+            top: 80px;
+            right: -30px;
+            width: 0;
+            height: 0;
+            border-left: 15px solid #667eea;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            z-index: 2;
+        }
+
+        .workflow-step:last-child .step-arrow {
+            display: none;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1200px) {
+            .workflow-steps::before {
+                display: none;
+            }
+
+            .step-arrow {
+                display: none;
+            }
+
+            .workflow-steps {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .workflow-step {
+                max-width: 100%;
+                margin-bottom: 30px;
+            }
+        }
+
+        /* 状态样式 */
+        .step-completed .step-icon {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+        }
+
+        .step-active .step-icon {
+            background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+            animation: glow 2s infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 0 10px 30px rgba(237, 137, 54, 0.4);
+            }
+            50% {
+                box-shadow: 0 10px 40px rgba(237, 137, 54, 0.8);
+            }
+        }
+
+        .step-pending .step-icon {
+            background: linear-gradient(135deg, #cbd5e0 0%, #a0aec0 100%);
+        }
+    </style>
+</head>
+<body>
+    <div class="workflow-container">
+        <div class="workflow-header">
+            <h1>智能API管理系统</h1>
+            <p>完整的工作流程，从文档到执行</p>
+        </div>
+
+        <div class="workflow-steps">
+            <div class="workflow-step step-completed">
+                <div class="step-icon">
+                    📚
+                    <div class="step-number">1</div>
+                </div>
+                <div class="step-title">接口文档库</div>
+                <div class="step-description">上传和管理API文档，支持多种格式</div>
+                <div class="step-arrow"></div>
+            </div>
+
+            <div class="workflow-step step-completed">
+                <div class="step-icon">
+                    🔗
+                    <div class="step-number">2</div>
+                </div>
+                <div class="step-title">接口管理</div>
+                <div class="step-description">查看和管理所有接口信息</div>
+                <div class="step-arrow"></div>
+            </div>
+
+            <div class="workflow-step step-active">
+                <div class="step-icon">
+                    🌐
+                    <div class="step-number">3</div>
+                </div>
+                <div class="step-title">接口依赖图</div>
+                <div class="step-description">分析接口之间的依赖关系</div>
+                <div class="step-arrow"></div>
+            </div>
+
+            <div class="workflow-step step-pending">
+                <div class="step-icon">
+                    📋
+                    <div class="step-number">4</div>
+                </div>
+                <div class="step-title">用例库</div>
+                <div class="step-description">管理和查看测试用例</div>
+                <div class="step-arrow"></div>
+            </div>
+
+            <div class="workflow-step step-pending">
+                <div class="step-icon">
+                    ⚡
+                    <div class="step-number">5</div>
+                </div>
+                <div class="step-title">执行任务</div>
+                <div class="step-description">执行测试任务并查看结果</div>
+                <div class="step-arrow"></div>
+            </div>
+
+            <div class="workflow-step step-pending">
+                <div class="step-icon">
+                    📦
+                    <div class="step-number">6</div>
+                </div>
+                <div class="step-title">场景组合</div>
+                <div class="step-description">管理场景用例集</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

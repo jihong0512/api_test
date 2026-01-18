@@ -1,0 +1,7 @@
+{
+  "service": "version.checkUpdateV2",
+  "token": "invalid_token",
+  "xjid": "30110",
+  "version": "4.5.0",
+  "platform": "ios"
+}

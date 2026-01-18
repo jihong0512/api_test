@@ -1,0 +1,5 @@
+{
+  "version": "",
+  "platform": "android",
+  "service": "version.checkUpdate"
+}

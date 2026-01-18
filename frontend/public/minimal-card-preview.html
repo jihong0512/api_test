@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>极简卡片布局方案</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #f8f9fa;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 300;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 60px;
+            font-size: 14px;
+            font-weight: 300;
+        }
+
+        .section {
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        /* 方案一：极简卡片 - 最小信息 */
+        .minimal-card-v1 {
+            background: #ffffff;
+            border: 1px solid #e8e8e8;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 12px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .minimal-card-v1:hover {
+            border-color: #1890ff;
+            box-shadow: 0 2px 8px rgba(24, 144, 255, 0.1);
+        }
+
+        .card-title-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #1a1a1a;
+        }
+
+        .card-meta {
+            font-size: 13px;
+            color: #999;
+        }
+
+        .card-url {
+            font-size: 13px;
+            color: #666;
+            font-family: 'Monaco', 'Menlo', monospace;
+            margin-top: 4px;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .btn-minimal {
+            padding: 4px 12px;
+            border: 1px solid #d9d9d9;
+            background: #fff;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-minimal:hover {
+            border-color: #1890ff;
+            color: #1890ff;
+        }
+
+        .btn-minimal.primary {
+            background: #1890ff;
+            border-color: #1890ff;
+            color: #fff;
+        }
+
+        .btn-minimal.primary:hover {
+            background: #40a9ff;
+        }
+
+        /* 方案二：极简卡片 - 图标优先 */
+        .minimal-card-v2 {
+            background: #ffffff;
+            border: none;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .minimal-card-v2:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .card-icon-large {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .card-title-v2 {
+            font-size: 16px;
+            font-weight: 500;
+            color: #1a1a1a;
+            margin-bottom: 6px;
+        }
+
+        .card-subtitle {
+            font-size: 13px;
+            color: #999;
+            margin-bottom: 16px;
+        }
+
+        .card-status {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .status-success {
+            background: #f0f9ff;
+            color: #1890ff;
+        }
+
+        .status-processing {
+            background: #fff7e6;
+            color: #fa8c16;
+        }
+
+        /* 方案三：极简卡片 - 列表式 */
+        .minimal-card-v3 {
+            background: #ffffff;
+            border: none;
+            border-left: 3px solid #e8e8e8;
+            border-radius: 0;
+            padding: 16px 20px;
+            margin-bottom: 8px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .minimal-card-v3:hover {
+            border-left-color: #1890ff;
+            background: #fafafa;
+        }
+
+        .card-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-badge {
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 600;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .badge-get {
+            background: #e6f7ff;
+            color: #1890ff;
+        }
+
+        .badge-post {
+            background: #f6ffed;
+            color: #52c41a;
+        }
+
+        .badge-put {
+            background: #fff7e6;
+            color: #fa8c16;
+        }
+
+        .card-content-v3 {
+            flex: 1;
+        }
+
+        .card-title-v3 {
+            font-size: 15px;
+            font-weight: 500;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .card-url-v3 {
+            font-size: 12px;
+            color: #999;
+            font-family: 'Monaco', 'Menlo', monospace;
+        }
+
+        .card-action-v3 {
+            color: #1890ff;
+            font-size: 13px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .minimal-card-v3:hover .card-action-v3 {
+            opacity: 1;
+        }
+
+        /* 方案四：极简卡片 - 网格紧凑 */
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .minimal-card-v4 {
+            background: #ffffff;
+            border: 1px solid #f0f0f0;
+            border-radius: 4px;
+            padding: 16px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .minimal-card-v4:hover {
+            border-color: #1890ff;
+        }
+
+        .card-header-v4 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .card-method {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 2px;
+            background: #f0f0f0;
+            color: #666;
+        }
+
+        .card-title-v4 {
+            font-size: 14px;
+            font-weight: 500;
+            color: #1a1a1a;
+            flex: 1;
+        }
+
+        .card-url-v4 {
+            font-size: 12px;
+            color: #999;
+            font-family: 'Monaco', 'Menlo', monospace;
+            margin-bottom: 12px;
+            word-break: break-all;
+        }
+
+        .card-footer-v4 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+            border-top: 1px solid #f5f5f5;
+        }
+
+        .card-tag {
+            font-size: 11px;
+            color: #999;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .grid-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>极简卡片布局方案</h1>
+        <p class="subtitle">四种不同简洁度的设计方案</p>
+
+        <!-- 方案一：极简卡片 - 最小信息 -->
+        <div class="section">
+            <div class="section-title">方案一：极简列表式（最小信息）</div>
+            <div>
+                <div class="minimal-card-v1">
+                    <div class="card-title-row">
+                        <div>
+                            <div class="card-title">获取项目列表</div>
+                            <div class="card-url">GET /api/v1/projects</div>
+                        </div>
+                        <div class="card-meta">200</div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn-minimal">查看</button>
+                        <button class="btn-minimal primary">生成用例</button>
+                    </div>
+                </div>
+
+                <div class="minimal-card-v1">
+                    <div class="card-title-row">
+                        <div>
+                            <div class="card-title">创建项目</div>
+                            <div class="card-url">POST /api/v1/projects</div>
+                        </div>
+                        <div class="card-meta">201</div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn-minimal">查看</button>
+                        <button class="btn-minimal primary">生成用例</button>
+                    </div>
+                </div>
+
+                <div class="minimal-card-v1">
+                    <div class="card-title-row">
+                        <div>
+                            <div class="card-title">更新项目信息</div>
+                            <div class="card-url">PUT /api/v1/projects/:id</div>
+                        </div>
+                        <div class="card-meta">200</div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn-minimal">查看</button>
+                        <button class="btn-minimal primary">生成用例</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 方案二：极简卡片 - 图标优先 -->
+        <div class="section">
+            <div class="section-title">方案二：图标优先式（视觉引导）</div>
+            <div class="grid-layout">
+                <div class="minimal-card-v2">
+                    <div class="card-icon-large">📄</div>
+                    <div class="card-title-v2">Swagger文档</div>
+                    <div class="card-subtitle">15个接口</div>
+                    <span class="card-status status-success">已解析</span>
+                </div>
+
+                <div class="minimal-card-v2">
+                    <div class="card-icon-large">📄</div>
+                    <div class="card-title-v2">OpenAPI规范</div>
+                    <div class="card-subtitle">8个接口</div>
+                    <span class="card-status status-processing">解析中</span>
+                </div>
+
+                <div class="minimal-card-v2">
+                    <div class="card-icon-large">🔌</div>
+                    <div class="card-title-v2">获取项目列表</div>
+                    <div class="card-subtitle">GET /api/v1/projects</div>
+                    <span class="card-status status-success">200 OK</span>
+                </div>
+
+                <div class="minimal-card-v2">
+                    <div class="card-icon-large">🔌</div>
+                    <div class="card-title-v2">创建项目</div>
+                    <div class="card-subtitle">POST /api/v1/projects</div>
+                    <span class="card-status status-success">201 Created</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 方案三：极简卡片 - 列表式 -->
+        <div class="section">
+            <div class="section-title">方案三：极简列表式（一行展示）</div>
+            <div>
+                <div class="minimal-card-v3">
+                    <div class="card-row">
+                        <span class="card-badge badge-get">GET</span>
+                        <div class="card-content-v3">
+                            <div class="card-title-v3">获取项目列表</div>
+                            <div class="card-url-v3">/api/v1/projects</div>
+                        </div>
+                        <span class="card-action-v3">查看 →</span>
+                    </div>
+                </div>
+
+                <div class="minimal-card-v3">
+                    <div class="card-row">
+                        <span class="card-badge badge-post">POST</span>
+                        <div class="card-content-v3">
+                            <div class="card-title-v3">创建项目</div>
+                            <div class="card-url-v3">/api/v1/projects</div>
+                        </div>
+                        <span class="card-action-v3">查看 →</span>
+                    </div>
+                </div>
+
+                <div class="minimal-card-v3">
+                    <div class="card-row">
+                        <span class="card-badge badge-put">PUT</span>
+                        <div class="card-content-v3">
+                            <div class="card-title-v3">更新项目信息</div>
+                            <div class="card-url-v3">/api/v1/projects/:id</div>
+                        </div>
+                        <span class="card-action-v3">查看 →</span>
+                    </div>
+                </div>
+
+                <div class="minimal-card-v3">
+                    <div class="card-row">
+                        <span class="card-badge badge-get">GET</span>
+                        <div class="card-content-v3">
+                            <div class="card-title-v3">获取用户信息</div>
+                            <div class="card-url-v3">/api/v1/users/:id</div>
+                        </div>
+                        <span class="card-action-v3">查看 →</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 方案四：极简卡片 - 网格紧凑 -->
+        <div class="section">
+            <div class="section-title">方案四：网格紧凑式（信息平衡）</div>
+            <div class="grid-layout">
+                <div class="minimal-card-v4">
+                    <div class="card-header-v4">
+                        <span class="card-method">GET</span>
+                        <div class="card-title-v4">获取项目列表</div>
+                    </div>
+                    <div class="card-url-v4">/api/v1/projects</div>
+                    <div class="card-footer-v4">
+                        <span class="card-tag">项目管理</span>
+                        <button class="btn-minimal" style="padding: 2px 8px; font-size: 11px;">查看</button>
+                    </div>
+                </div>
+
+                <div class="minimal-card-v4">
+                    <div class="card-header-v4">
+                        <span class="card-method">POST</span>
+                        <div class="card-title-v4">创建项目</div>
+                    </div>
+                    <div class="card-url-v4">/api/v1/projects</div>
+                    <div class="card-footer-v4">
+                        <span class="card-tag">项目管理</span>
+                        <button class="btn-minimal" style="padding: 2px 8px; font-size: 11px;">查看</button>
+                    </div>
+                </div>
+
+                <div class="minimal-card-v4">
+                    <div class="card-header-v4">
+                        <span class="card-method">PUT</span>
+                        <div class="card-title-v4">更新项目</div>
+                    </div>
+                    <div class="card-url-v4">/api/v1/projects/:id</div>
+                    <div class="card-footer-v4">
+                        <span class="card-tag">项目管理</span>
+                        <button class="btn-minimal" style="padding: 2px 8px; font-size: 11px;">查看</button>
+                    </div>
+                </div>
+
+                <div class="minimal-card-v4">
+                    <div class="card-header-v4">
+                        <span class="card-method">GET</span>
+                        <div class="card-title-v4">获取用户信息</div>
+                    </div>
+                    <div class="card-url-v4">/api/v1/users/:id</div>
+                    <div class="card-footer-v4">
+                        <span class="card-tag">用户管理</span>
+                        <button class="btn-minimal" style="padding: 2px 8px; font-size: 11px;">查看</button>
+                    </div>
+                </div>
+
+                <div class="minimal-card-v4">
+                    <div class="card-header-v4">
+                        <span class="card-method">DELETE</span>
+                        <div class="card-title-v4">删除项目</div>
+                    </div>
+                    <div class="card-url-v4">/api/v1/projects/:id</div>
+                    <div class="card-footer-v4">
+                        <span class="card-tag">项目管理</span>
+                        <button class="btn-minimal" style="padding: 2px 8px; font-size: 11px;">查看</button>
+                    </div>
+                </div>
+
+                <div class="minimal-card-v4">
+                    <div class="card-header-v4">
+                        <span class="card-method">GET</span>
+                        <div class="card-title-v4">查询项目列表</div>
+                    </div>
+                    <div class="card-url-v4">/api/v1/projects?page=1</div>
+                    <div class="card-footer-v4">
+                        <span class="card-tag">项目管理</span>
+                        <button class="btn-minimal" style="padding: 2px 8px; font-size: 11px;">查看</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 对比说明 -->
+        <div style="margin-top: 80px; padding: 32px; background: #fff; border-radius: 8px; border: 1px solid #e8e8e8;">
+            <h3 style="font-size: 18px; margin-bottom: 24px; color: #333;">方案对比</h3>
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="border-bottom: 2px solid #f0f0f0;">
+                        <th style="padding: 12px; text-align: left; font-weight: 500; color: #666;">方案</th>
+                        <th style="padding: 12px; text-align: left; font-weight: 500; color: #666;">简洁度</th>
+                        <th style="padding: 12px; text-align: left; font-weight: 500; color: #666;">信息量</th>
+                        <th style="padding: 12px; text-align: left; font-weight: 500; color: #666;">适用场景</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid #f5f5f5;">
+                        <td style="padding: 12px;">方案一：极简列表式</td>
+                        <td style="padding: 12px;">⭐⭐⭐⭐⭐</td>
+                        <td style="padding: 12px;">最少（3个信息）</td>
+                        <td style="padding: 12px;">快速浏览，操作频繁</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #f5f5f5;">
+                        <td style="padding: 12px;">方案二：图标优先式</td>
+                        <td style="padding: 12px;">⭐⭐⭐⭐</td>
+                        <td style="padding: 12px;">较少（4个信息）</td>
+                        <td style="padding: 12px;">视觉引导，分类展示</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #f5f5f5;">
+                        <td style="padding: 12px;">方案三：一行列表式</td>
+                        <td style="padding: 12px;">⭐⭐⭐⭐⭐</td>
+                        <td style="padding: 12px;">最少（3个信息）</td>
+                        <td style="padding: 12px;">大量数据，快速扫描</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px;">方案四：网格紧凑式</td>
+                        <td style="padding: 12px;">⭐⭐⭐⭐</td>
+                        <td style="padding: 12px;">适中（4个信息）</td>
+                        <td style="padding: 12px;">信息平衡，网格布局</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
+

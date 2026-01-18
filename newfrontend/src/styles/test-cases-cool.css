@@ -1,0 +1,448 @@
+/* 炫酷测试用例页面样式 */
+
+/* 页面容器 */
+.test-cases-container {
+  padding: 24px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+}
+
+/* 统计信息栏 - 炫酷卡片效果 */
+.stats-bar {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 24px;
+  margin-bottom: 24px;
+  border-radius: 16px;
+  display: flex;
+  gap: 40px;
+  font-size: 14px;
+  box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+  backdrop-filter: blur(10px);
+  animation: slideInDown 0.6s ease-out;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.stat-item:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.stat-label {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 13px;
+}
+
+.stat-value {
+  font-weight: 700;
+  color: #fff;
+  font-size: 24px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* 标签页容器 */
+.tabs-container {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* 树形结构卡片 */
+.tree-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.tree-card:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+/* 测试用例节点样式 */
+.test-case-node {
+  padding: 12px 16px;
+  margin: 8px 0;
+  background: linear-gradient(135deg, #f6f8fb 0%, #ffffff 100%);
+  border-radius: 8px;
+  border-left: 4px solid #1890ff;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.test-case-node:hover {
+  background: linear-gradient(135deg, #e6f7ff 0%, #f0f9ff 100%);
+  border-left-color: #40a9ff;
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(24, 144, 255, 0.15);
+}
+
+.test-case-node.active {
+  background: linear-gradient(135deg, #e6f7ff 0%, #bae7ff 100%);
+  border-left-color: #1890ff;
+  box-shadow: 0 4px 16px rgba(24, 144, 255, 0.2);
+}
+
+/* 状态标签 - 炫酷效果 */
+.status-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  animation: pulse 2s infinite;
+}
+
+.status-tag.active {
+  background: linear-gradient(135deg, #52c41a 0%, #73d13d 100%);
+  color: #fff;
+}
+
+.status-tag.generating {
+  background: linear-gradient(135deg, #1890ff 0%, #40a9ff 100%);
+  color: #fff;
+}
+
+.status-tag.completed {
+  background: linear-gradient(135deg, #52c41a 0%, #73d13d 100%);
+  color: #fff;
+}
+
+.status-tag.failed {
+  background: linear-gradient(135deg, #ff4d4f 0%, #ff7875 100%);
+  color: #fff;
+}
+
+/* 按钮样式增强 */
+.cool-button {
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cool-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.cool-button-primary {
+  background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
+  border: none;
+  color: #fff;
+}
+
+.cool-button-primary:hover {
+  background: linear-gradient(135deg, #40a9ff 0%, #1890ff 100%);
+  box-shadow: 0 4px 16px rgba(24, 144, 255, 0.4);
+}
+
+/* 卡片操作按钮 */
+.card-action-button {
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  font-size: 12px;
+}
+
+.card-action-button:hover {
+  background: rgba(24, 144, 255, 0.1);
+  transform: scale(1.05);
+}
+
+/* 进度条样式 */
+.cool-progress {
+  border-radius: 10px;
+  overflow: hidden;
+  background: #f0f0f0;
+  height: 8px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cool-progress .ant-progress-bg {
+  background: linear-gradient(90deg, #1890ff 0%, #40a9ff 50%, #69c0ff 100%);
+  animation: progressAnimation 2s ease-in-out infinite;
+}
+
+/* 模态框样式 */
+.cool-modal .ant-modal-content {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.cool-modal .ant-modal-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-bottom: none;
+  padding: 20px 24px;
+}
+
+.cool-modal .ant-modal-title {
+  color: #fff;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.cool-modal .ant-modal-close {
+  color: #fff;
+}
+
+.cool-modal .ant-modal-close:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* 抽屉样式 */
+.cool-drawer .ant-drawer-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-bottom: none;
+  padding: 20px 24px;
+}
+
+.cool-drawer .ant-drawer-title {
+  color: #fff;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.cool-drawer .ant-drawer-close {
+  color: #fff;
+}
+
+.cool-drawer .ant-drawer-close:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* 空状态样式 */
+.cool-empty {
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.cool-empty-icon {
+  font-size: 64px;
+  color: #d9d9d9;
+  margin-bottom: 16px;
+  animation: float 3s ease-in-out infinite;
+}
+
+.cool-empty-text {
+  color: #8c8c8c;
+  font-size: 14px;
+}
+
+/* 动画效果 */
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes progressAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* 标签页样式增强 */
+.ant-tabs-tab {
+  border-radius: 8px 8px 0 0;
+  transition: all 0.3s ease;
+}
+
+.ant-tabs-tab:hover {
+  color: #1890ff;
+}
+
+.ant-tabs-tab-active {
+  background: linear-gradient(135deg, #e6f7ff 0%, #f0f9ff 100%);
+}
+
+.ant-tabs-ink-bar {
+  background: linear-gradient(90deg, #1890ff 0%, #40a9ff 100%);
+  height: 3px;
+  border-radius: 2px;
+}
+
+/* 树节点图标动画 */
+.ant-tree-iconEle {
+  transition: transform 0.2s ease;
+}
+
+.ant-tree-node-selected .ant-tree-iconEle {
+  transform: rotate(90deg);
+}
+
+/* 树节点样式增强 */
+.ant-tree-node-content-wrapper {
+  border-radius: 6px;
+  padding: 4px 8px;
+  transition: all 0.2s ease;
+}
+
+.ant-tree-node-content-wrapper:hover {
+  background: rgba(24, 144, 255, 0.08);
+}
+
+.ant-tree-node-selected .ant-tree-node-content-wrapper {
+  background: linear-gradient(135deg, #e6f7ff 0%, #bae7ff 100%);
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.15);
+}
+
+/* 树节点复选框样式 */
+.ant-tree-checkbox {
+  transition: all 0.2s ease;
+}
+
+.ant-tree-checkbox:hover {
+  transform: scale(1.1);
+}
+
+.ant-tree-checkbox-checked .ant-tree-checkbox-inner {
+  background: linear-gradient(135deg, #1890ff 0%, #40a9ff 100%);
+  border-color: #1890ff;
+  box-shadow: 0 2px 4px rgba(24, 144, 255, 0.3);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .stats-bar {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .stat-item {
+    width: 100%;
+  }
+}
+
+/* 加载动画 */
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+.loading-spinner .ant-spin-dot {
+  font-size: 32px;
+}
+
+/* 代码编辑器容器 */
+.code-editor-container {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e8e8e8;
+}
+
+/* 表格样式增强 */
+.cool-table {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.cool-table .ant-table {
+  border-radius: 8px;
+}
+
+.cool-table .ant-table-thead > tr > th {
+  background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%);
+  border-bottom: 2px solid #e8e8e8;
+  font-weight: 600;
+  color: #262626;
+}
+
+.cool-table .ant-table-tbody > tr {
+  transition: all 0.2s ease;
+}
+
+.cool-table .ant-table-tbody > tr:hover {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e6f7ff 100%);
+  transform: scale(1.01);
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.1);
+}
+
+.cool-table .ant-table-tbody > tr > td {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.cool-table .ant-pagination {
+  margin-top: 16px;
+  text-align: right;
+}
+
+/* 描述列表样式 */
+.cool-descriptions {
+  background: #fff;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.cool-descriptions .ant-descriptions-item-label {
+  font-weight: 600;
+  color: #595959;
+  background: #fafafa;
+}
+
+.cool-descriptions .ant-descriptions-item-content {
+  color: #262626;
+}
+

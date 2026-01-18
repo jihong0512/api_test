@@ -1,0 +1,86 @@
+# 开发环境配置：只运行基础服务（MySQL、Redis、Neo4j、MinIO）
+# Backend、Frontend、Celery Worker 在本地运行
+
+services:
+  mysql:
+    # 使用官方镜像源（最稳定可靠）
+    image: mysql:8.0
+    container_name: api_test_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: api_test
+    ports:
+      - "3309:3306"  # 映射到本地3309端口，本地应用通过localhost:3309访问
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./backend/init.sql:/docker-entrypoint-initdb.d/1-init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p123456"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - api_test_network
+    restart: unless-stopped
+
+  redis:
+    # 使用官方镜像源（最稳定可靠）
+    image: redis:7-alpine
+    container_name: api_test_redis
+    ports:
+      - "6382:6379"  # 映射到本地6382端口，本地应用通过localhost:6382访问
+    networks:
+      - api_test_network
+    restart: unless-stopped
+
+  minio:
+    image: minio/minio:latest
+    container_name: api_test_minio
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin123456
+    ports:
+      - "9005:9000"  # API端口，本地应用通过localhost:9005访问
+      - "9006:9001"  # 控制台端口，浏览器通过http://localhost:9006访问
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    networks:
+      - api_test_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    restart: unless-stopped
+
+  neo4j:
+    # 国内可用镜像源
+    image: neo4j:5.15
+    container_name: api_test_neo4j
+    environment:
+      NEO4J_AUTH: neo4j/123456789
+      NEO4J_PLUGINS: '["apoc"]'
+      NEO4J_dbms_security_auth__minimum__password__length: "6"
+    ports:
+      - "7475:7474"  # HTTP端口，浏览器通过http://localhost:7475访问（避免与uitest的7474端口冲突）
+      - "7688:7687"  # Bolt端口，本地应用通过bolt://localhost:7688访问（避免与uitest的7687端口冲突）
+    volumes:
+      - neo4j_data:/data
+    networks:
+      - api_test_network
+    healthcheck:
+      test: ["CMD", "cypher-shell", "-u", "neo4j", "-p", "123456789", "RETURN 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
+  minio_data:
+  neo4j_data:
+
+networks:
+  api_test_network:
+    driver: bridge

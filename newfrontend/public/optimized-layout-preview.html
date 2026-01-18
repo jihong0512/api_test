@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>优化布局预览 - 核心流程突出</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: #f5f5f5;
+            overflow: hidden;
+        }
+
+        .app-layout {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* 左侧项目列表 */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+            border-right: 1px solid #e8e8e8;
+            overflow-y: auto;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 20px 16px;
+            border-bottom: 1px solid #e8e8e8;
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .project-section {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .section-title {
+            padding: 8px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #8c8c8c;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .project-item {
+            padding: 10px 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #595959;
+            border-left: 3px solid transparent;
+        }
+
+        .project-item:hover {
+            background: #f0f7ff;
+            color: #1890ff;
+        }
+
+        .project-item.active {
+            background: #e6f7ff;
+            color: #1890ff;
+            border-left-color: #1890ff;
+            font-weight: 500;
+        }
+
+        .project-icon {
+            font-size: 16px;
+        }
+
+        .project-name {
+            flex: 1;
+            font-size: 14px;
+        }
+
+        .project-badge {
+            font-size: 11px;
+            padding: 2px 6px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            color: #666;
+        }
+
+        .project-item.active .project-badge {
+            background: #1890ff;
+            color: #fff;
+        }
+
+        /* 次要功能区域 */
+        .secondary-section {
+            border-top: 1px solid #e8e8e8;
+            padding: 12px 0;
+        }
+
+        .secondary-title {
+            padding: 8px 16px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #bfbfbf;
+            text-transform: uppercase;
+        }
+
+        .secondary-item {
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #8c8c8c;
+            font-size: 13px;
+        }
+
+        .secondary-item:hover {
+            background: #fafafa;
+            color: #666;
+        }
+
+        /* 主内容区 */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        /* 项目信息栏 */
+        .project-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .project-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .project-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .project-meta {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .more-menu {
+            position: relative;
+        }
+
+        .more-btn {
+            padding: 6px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border-radius: 4px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .more-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .more-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 8px;
+            background: #fff;
+            border: 1px solid #e8e8e8;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            min-width: 160px;
+            z-index: 1000;
+            display: none;
+        }
+
+        .more-dropdown.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 10px 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .dropdown-item:hover {
+            background: #f5f5f5;
+            color: #1890ff;
+        }
+
+        .dropdown-item:first-child {
+            border-radius: 6px 6px 0 0;
+        }
+
+        .dropdown-item:last-child {
+            border-radius: 0 0 6px 6px;
+        }
+
+        /* 顶部标签栏 - 核心流程 */
+        .tabs-bar {
+            background: #fff;
+            border-bottom: 1px solid #f0f0f0;
+            padding: 0 24px;
+            display: flex;
+            gap: 4px;
+            overflow-x: auto;
+        }
+
+        .tab-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            white-space: nowrap;
+            transition: all 0.2s;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            position: relative;
+        }
+
+        .tab-item:hover {
+            color: #1890ff;
+        }
+
+        .tab-item.active {
+            color: #1890ff;
+            border-bottom-color: #1890ff;
+            font-weight: 500;
+        }
+
+        .tab-item.core {
+            background: linear-gradient(180deg, #f0f7ff 0%, transparent 100%);
+        }
+
+        .tab-item.core.active {
+            background: linear-gradient(180deg, #e6f7ff 0%, transparent 100%);
+        }
+
+        /* 内容区域 */
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            background: #f5f5f5;
+        }
+
+        /* 页面头部 */
+        .page-header {
+            background: #fff;
+            padding: 16px 24px;
+            margin-bottom: 16px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .page-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: #1a1a1a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .page-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            padding: 6px 16px;
+            border: 1px solid #d9d9d9;
+            background: #fff;
+            border-radius: 4px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            border-color: #1890ff;
+            color: #1890ff;
+        }
+
+        .btn-primary {
+            background: #1890ff;
+            border-color: #1890ff;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #40a9ff;
+        }
+
+        /* 统计信息栏 */
+        .stats-bar {
+            background: #fff;
+            padding: 16px 24px;
+            margin-bottom: 16px;
+            border-radius: 6px;
+            display: flex;
+            gap: 32px;
+            font-size: 14px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stat-label {
+            color: #8c8c8c;
+        }
+
+        .stat-value {
+            font-weight: 600;
+            color: #1890ff;
+        }
+
+        /* 极简卡片 */
+        .minimal-card {
+            background: #fff;
+            border: 1px solid #f0f0f0;
+            border-radius: 4px;
+            padding: 14px 16px;
+            margin-bottom: 8px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .minimal-card:hover {
+            border-color: #1890ff;
+            box-shadow: 0 2px 8px rgba(24, 144, 255, 0.1);
+        }
+
+        .card-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .method-badge {
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 600;
+            min-width: 50px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .badge-get {
+            background: #e6f7ff;
+            color: #1890ff;
+        }
+
+        .badge-post {
+            background: #f6ffed;
+            color: #52c41a;
+        }
+
+        .badge-put {
+            background: #fff7e6;
+            color: #fa8c16;
+        }
+
+        .badge-delete {
+            background: #fff2f0;
+            color: #ff4d4f;
+        }
+
+        .card-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .card-url {
+            font-size: 12px;
+            color: #999;
+            font-family: 'Monaco', 'Menlo', monospace;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .card-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #999;
+            flex-shrink: 0;
+        }
+
+        .card-action {
+            opacity: 0;
+            transition: opacity 0.2s;
+            color: #1890ff;
+            font-size: 13px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .minimal-card:hover .card-action {
+            opacity: 1;
+        }
+
+        /* 流程说明 */
+        .workflow-info {
+            background: linear-gradient(135deg, #f0f7ff 0%, #e6f7ff 100%);
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            border-radius: 6px;
+            border-left: 4px solid #1890ff;
+        }
+
+        .workflow-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1890ff;
+            margin-bottom: 8px;
+        }
+
+        .workflow-steps {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .workflow-step {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .workflow-arrow {
+            color: #1890ff;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-layout">
+        <!-- 左侧项目列表 -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <span>🚀</span>
+                <span>APITest</span>
+            </div>
+
+            <div class="project-section">
+                <div class="section-title">项目列表</div>
+                <div class="project-item active">
+                    <span class="project-icon">📁</span>
+                    <span class="project-name">web测试项目1</span>
+                    <span class="project-badge">15</span>
+                </div>
+                <div class="project-item">
+                    <span class="project-icon">📁</span>
+                    <span class="project-name">ui_test</span>
+                    <span class="project-badge">8</span>
+                </div>
+                <div class="project-item">
+                    <span class="project-icon">📁</span>
+                    <span class="project-name">API测试项目</span>
+                    <span class="project-badge">23</span>
+                </div>
+            </div>
+
+
+            <div style="padding: 12px 16px; border-top: 1px solid #e8e8e8;">
+                <button class="btn" style="width: 100%; padding: 8px; font-size: 13px;">+ 新建项目</button>
+            </div>
+        </div>
+
+        <!-- 主内容区 -->
+        <div class="main-content">
+            <!-- 项目信息栏 -->
+            <div class="project-header">
+                <div class="project-info">
+                    <span class="project-title">web测试项目1</span>
+                    <span class="project-meta">• 15个接口 • 8个用例 • 5个场景</span>
+                </div>
+                <div class="header-actions">
+                    <button class="more-btn" onclick="toggleMoreMenu()">测试项目配置 ▼</button>
+                    <div class="more-menu">
+                        <div class="more-dropdown" id="moreDropdown">
+                            <div class="dropdown-item">
+                                <span>💾</span>
+                                <span>数据库信息</span>
+                            </div>
+                            <div class="dropdown-item">
+                                <span>🌍</span>
+                                <span>测试环境</span>
+                            </div>
+                            <div class="dropdown-item">
+                                <span>📊</span>
+                                <span>知识图谱</span>
+                            </div>
+                            <div class="dropdown-item">
+                                <span>⚙️</span>
+                                <span>项目设置</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 顶部标签栏 - 核心流程 -->
+            <div class="tabs-bar">
+                <div class="tab-item core active">
+                    <span>📄</span>
+                    <span>文档管理</span>
+                </div>
+                <div class="tab-item core">
+                    <span>🔌</span>
+                    <span>接口列表</span>
+                </div>
+                <div class="tab-item core">
+                    <span>🔗</span>
+                    <span>接口依赖分析</span>
+                </div>
+                <div class="tab-item core">
+                    <span>📝</span>
+                    <span>测试用例</span>
+                </div>
+                <div class="tab-item core">
+                    <span>🚀</span>
+                    <span>测试任务</span>
+                </div>
+                <div class="tab-item core">
+                    <span>📦</span>
+                    <span>小场景用例集</span>
+                </div>
+            </div>
+
+            <!-- 内容区域 -->
+            <div class="content-area">
+                <!-- 核心流程说明 -->
+                <div class="workflow-info">
+                    <div class="workflow-title">📋 核心工作流程</div>
+                    <div class="workflow-steps">
+                        <div class="workflow-step">
+                            <span>📄</span>
+                            <span>文档管理</span>
+                        </div>
+                        <span class="workflow-arrow">→</span>
+                        <div class="workflow-step">
+                            <span>🔌</span>
+                            <span>接口列表</span>
+                        </div>
+                        <span class="workflow-arrow">→</span>
+                        <div class="workflow-step">
+                            <span>🔗</span>
+                            <span>依赖分析</span>
+                        </div>
+                        <span class="workflow-arrow">→</span>
+                        <div class="workflow-step">
+                            <span>📝</span>
+                            <span>测试用例</span>
+                        </div>
+                        <span class="workflow-arrow">→</span>
+                        <div class="workflow-step">
+                            <span>🚀</span>
+                            <span>测试任务</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 页面头部 -->
+                <div class="page-header">
+                    <div class="page-title">
+                        <span>🔌</span>
+                        <span>接口列表</span>
+                    </div>
+                    <div class="page-actions">
+                        <button class="btn">筛选</button>
+                        <button class="btn">搜索</button>
+                        <button class="btn btn-primary">生成测试用例</button>
+                    </div>
+                </div>
+
+                <!-- 统计信息 -->
+                <div class="stats-bar">
+                    <div class="stat-item">
+                        <span class="stat-label">总计:</span>
+                        <span class="stat-value">15</span>
+                        <span class="stat-label">个接口</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">已生成用例:</span>
+                        <span class="stat-value">8</span>
+                        <span class="stat-label">个</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">GET:</span>
+                        <span class="stat-value">5</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">POST:</span>
+                        <span class="stat-value">3</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">PUT:</span>
+                        <span class="stat-value">2</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">DELETE:</span>
+                        <span class="stat-value">1</span>
+                    </div>
+                </div>
+
+                <!-- 极简卡片列表 -->
+                <div>
+                    <div class="minimal-card">
+                        <div class="card-row">
+                            <span class="method-badge badge-get">GET</span>
+                            <div class="card-content">
+                                <div class="card-title">获取项目列表</div>
+                                <div class="card-url">/api/v1/projects</div>
+                            </div>
+                            <div class="card-meta">
+                                <span>200</span>
+                                <span>•</span>
+                                <span>项目管理</span>
+                            </div>
+                            <span class="card-action">查看 →</span>
+                        </div>
+                    </div>
+
+                    <div class="minimal-card">
+                        <div class="card-row">
+                            <span class="method-badge badge-post">POST</span>
+                            <div class="card-content">
+                                <div class="card-title">创建项目</div>
+                                <div class="card-url">/api/v1/projects</div>
+                            </div>
+                            <div class="card-meta">
+                                <span>201</span>
+                                <span>•</span>
+                                <span>项目管理</span>
+                            </div>
+                            <span class="card-action">查看 →</span>
+                        </div>
+                    </div>
+
+                    <div class="minimal-card">
+                        <div class="card-row">
+                            <span class="method-badge badge-put">PUT</span>
+                            <div class="card-content">
+                                <div class="card-title">更新项目信息</div>
+                                <div class="card-url">/api/v1/projects/:id</div>
+                            </div>
+                            <div class="card-meta">
+                                <span>200</span>
+                                <span>•</span>
+                                <span>项目管理</span>
+                            </div>
+                            <span class="card-action">查看 →</span>
+                        </div>
+                    </div>
+
+                    <div class="minimal-card">
+                        <div class="card-row">
+                            <span class="method-badge badge-delete">DELETE</span>
+                            <div class="card-content">
+                                <div class="card-title">删除项目</div>
+                                <div class="card-url">/api/v1/projects/:id</div>
+                            </div>
+                            <div class="card-meta">
+                                <span>204</span>
+                                <span>•</span>
+                                <span>项目管理</span>
+                            </div>
+                            <span class="card-action">查看 →</span>
+                        </div>
+                    </div>
+
+                    <div class="minimal-card">
+                        <div class="card-row">
+                            <span class="method-badge badge-get">GET</span>
+                            <div class="card-content">
+                                <div class="card-title">获取用户信息</div>
+                                <div class="card-url">/api/v1/users/:id</div>
+                            </div>
+                            <div class="card-meta">
+                                <span>200</span>
+                                <span>•</span>
+                                <span>用户管理</span>
+                            </div>
+                            <span class="card-action">查看 →</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 更多菜单切换
+        function toggleMoreMenu() {
+            const dropdown = document.getElementById('moreDropdown');
+            dropdown.classList.toggle('show');
+        }
+
+        // 点击外部关闭菜单
+        document.addEventListener('click', function(event) {
+            const moreMenu = document.querySelector('.more-menu');
+            const dropdown = document.getElementById('moreDropdown');
+            if (!moreMenu.contains(event.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+
+        // 项目切换
+        document.querySelectorAll('.project-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.project-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                
+                const projectName = this.querySelector('.project-name').textContent;
+                document.querySelector('.project-title').textContent = projectName;
+            });
+        });
+
+        // 标签切换
+        document.querySelectorAll('.tab-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.tab-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // 下拉菜单项点击
+        document.querySelectorAll('.dropdown-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const dropdown = document.getElementById('moreDropdown');
+                dropdown.classList.remove('show');
+                alert('跳转到: ' + this.textContent.trim());
+            });
+        });
+    </script>
+</body>
+</html>
+

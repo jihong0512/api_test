@@ -1,0 +1,4 @@
+[DEBUG] 接口响应状态码: 200
+[DEBUG] 接口响应头: {'Date': 'Fri, 07 Nov 2025 15:53:19 GMT', 'Content-Type': 'application/json;charset=utf-8', 'Transfer-Encoding': 'chunked', 'Connection': 'keep-alive', 'X-Powered-By': 'PHP/7.4.33', 'Access-Control-Allow-Origin': '*', 'Strict-Transport-Security': 'max-age=15724800; includeSubDomains'}
+[DEBUG] 接口响应体: {"ret":200,"data":{"code":"0","info":null,"msg":""},"msg":"","time":"2025\/11\/07 23:53:19"}
+[DEBUG] 接口响应JSON: {'ret': 200, 'data': {'code': '0', 'info': None, 'msg': ''}, 'msg': '', 'time': '2025/11/07 23:53:19'}

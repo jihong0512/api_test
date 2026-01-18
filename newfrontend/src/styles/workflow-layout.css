@@ -1,0 +1,280 @@
+/* 流程布局样式 */
+.workflow-layout-container {
+  padding: 24px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: calc(100vh - 64px);
+}
+
+/* 只在项目详情页面应用背景渐变 */
+.workflow-layout-container:has(.workflow-steps) {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.workflow-header {
+  display: none; /* 隐藏整个header区域 */
+}
+
+.workflow-header h2 {
+  font-size: 28px;
+  color: #2d3748;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: none; /* 隐藏标题 */
+}
+
+.workflow-header p {
+  color: #718096;
+  font-size: 14px;
+}
+
+.workflow-steps {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  padding: 40px 20px;
+  margin-bottom: 16px;
+  flex-wrap: nowrap;
+  gap: 15px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  overflow-x: auto;
+}
+
+/* 连接线 - 在图标正中央，不穿过图标 */
+.workflow-steps::before {
+  content: '';
+  position: absolute;
+  top: 70px; /* 40px (padding-top) + 30px (图标高度的一半) = 图标中心位置 */
+  left: 90px; /* 从第一个图标右边缘开始 (图标中心60px + 图标半径30px) */
+  right: 90px; /* 到最后一个图标左边缘结束 (图标中心60px + 图标半径30px) */
+  height: 3px;
+  background: linear-gradient(90deg, 
+    #667eea 0%, 
+    #667eea 15%, 
+    #48bb78 20%, 
+    #48bb78 35%, 
+    #ed8936 40%, 
+    #ed8936 55%, 
+    #4299e1 60%, 
+    #4299e1 75%, 
+    #f56565 80%, 
+    #f56565 95%, 
+    #9f7aea 100%);
+  z-index: 0;
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.workflow-step {
+  flex: 1;
+  min-width: 120px;
+  max-width: 150px;
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 第一个和最后一个步骤的图标遮挡连接线 */
+.workflow-step:first-child::after,
+.workflow-step:last-child::after {
+  content: '';
+  position: absolute;
+  top: 70px;
+  width: 30px; /* 图标半径 */
+  height: 3px;
+  background: white;
+  z-index: 1;
+}
+
+.workflow-step:first-child::after {
+  left: 60px; /* 从图标中心开始，向右遮挡 */
+}
+
+.workflow-step:last-child::after {
+  right: 60px; /* 从图标中心开始，向左遮挡 */
+}
+
+/* 第一个和最后一个步骤的图标遮挡连接线 */
+.workflow-step:first-child::after,
+.workflow-step:last-child::after {
+  content: '';
+  position: absolute;
+  top: 70px;
+  width: 30px; /* 图标半径 */
+  height: 3px;
+  background: white;
+  z-index: 1;
+}
+
+.workflow-step:first-child::after {
+  left: 60px; /* 从图标中心开始，向右遮挡 */
+}
+
+.workflow-step:last-child::after {
+  right: 60px; /* 从图标中心开始，向左遮挡 */
+}
+
+.workflow-step:hover {
+  transform: translateY(-3px);
+}
+
+.step-icon-wrapper {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 12px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 2; /* 确保图标在连接线上方 */
+  border: 3px solid white; /* 添加白色边框，与连接线分离 */
+}
+
+.workflow-step:hover .step-icon-wrapper {
+  transform: scale(1.15);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.step-number {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 22px;
+  height: 22px;
+  background: #f56565;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 11px;
+  box-shadow: 0 2px 6px rgba(245, 101, 101, 0.4);
+}
+
+.step-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 6px;
+  white-space: nowrap;
+}
+
+.step-description {
+  font-size: 11px;
+  color: #718096;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.step-arrow {
+  position: absolute;
+  top: 70px; /* 与连接线对齐，图标中心位置 */
+  right: -12px;
+  width: 0;
+  height: 0;
+  border-left: 8px solid;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  z-index: 1;
+  transform: translateY(-50%); /* 箭头垂直居中 */
+}
+
+.workflow-step:last-child .step-arrow {
+  display: none;
+}
+
+/* 状态样式 */
+.workflow-step.step-completed .step-icon-wrapper {
+  opacity: 0.9;
+  filter: brightness(1.05);
+}
+
+.workflow-step.step-active .step-icon-wrapper {
+  animation: glow 2s infinite;
+  filter: brightness(1.15);
+  transform: scale(1.05);
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  }
+  50% {
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5);
+  }
+}
+
+.workflow-step.step-pending .step-icon-wrapper {
+  opacity: 0.7;
+  filter: grayscale(0.2);
+}
+
+/* 内容区域 */
+.workflow-content {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 16px 24px;
+  min-height: 400px;
+  margin-top: 0;
+  transition: all 0.3s ease; /* 平滑过渡效果 */
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+  .workflow-steps::before {
+    display: none;
+  }
+
+  .step-arrow {
+    display: none;
+  }
+
+  .workflow-steps {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .workflow-step {
+    max-width: 100%;
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .workflow-layout-container {
+    padding: 16px;
+  }
+
+  .workflow-header h2 {
+    font-size: 24px;
+  }
+
+  .step-icon-wrapper {
+    width: 80px;
+    height: 80px;
+    font-size: 32px;
+  }
+}
+

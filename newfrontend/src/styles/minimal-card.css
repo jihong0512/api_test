@@ -1,0 +1,162 @@
+/* 极简卡片样式 */
+.minimal-card {
+  background: #fff;
+  border: 1px solid #f0f0f0;
+  border-radius: 4px;
+  padding: 14px 16px;
+  margin-bottom: 8px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.minimal-card:hover {
+  border-color: #1890ff;
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.1);
+}
+
+.card-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.method-badge {
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  min-width: 50px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.badge-get {
+  background: #e6f7ff;
+  color: #1890ff;
+}
+
+.badge-post {
+  background: #f6ffed;
+  color: #52c41a;
+}
+
+.badge-put {
+  background: #fff7e6;
+  color: #fa8c16;
+}
+
+.badge-patch {
+  background: #fff7e6;
+  color: #fa8c16;
+}
+
+.badge-delete {
+  background: #fff2f0;
+  color: #ff4d4f;
+}
+
+.badge-options {
+  background: #f0f0f0;
+  color: #666;
+}
+
+.card-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.card-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a1a1a;
+  margin-bottom: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card-url {
+  font-size: 12px;
+  color: #999;
+  font-family: 'Monaco', 'Menlo', monospace;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #999;
+  flex-shrink: 0;
+}
+
+.card-action {
+  opacity: 0;
+  transition: opacity 0.2s;
+  color: #1890ff;
+  font-size: 13px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.minimal-card:hover .card-action {
+  opacity: 1;
+}
+
+/* 页面头部 */
+.page-header {
+  background: #fff;
+  padding: 16px 24px;
+  margin-bottom: 16px;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.page-title {
+  font-size: 18px;
+  font-weight: 500;
+  color: #1a1a1a;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.page-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* 统计信息栏 */
+.stats-bar {
+  background: #fff;
+  padding: 4px 24px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  display: flex;
+  gap: 32px;
+  font-size: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  line-height: 1;
+}
+
+.stat-label {
+  color: #8c8c8c;
+}
+
+.stat-value {
+  font-weight: 600;
+  color: #1890ff;
+}
+
